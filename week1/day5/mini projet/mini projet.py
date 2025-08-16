@@ -7,7 +7,7 @@ class Game:
             user_choice = input("Choisis entre rock, paper ou scissors : ").lower()
             if user_choice in choices:
                 return user_choice
-            print("Oups ! Choix invalide. Réessaie.")
+            print("Oups ! Choix invalide.")
 
     def get_computer_item(self):
         """Choisit au hasard rock, paper ou scissors pour l'ordinateur"""
