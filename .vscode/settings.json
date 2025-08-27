@@ -5,8 +5,8 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
-            "name": "public",
-            "database": "public_db",
+            "name": "car_dealership",
+            "database": "car_dealership",
             "username": "postgres",
             "password": "aicha1234"
         }
