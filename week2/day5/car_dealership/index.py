@@ -1,10 +1,20 @@
-
 from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2
+from database.index import db
+from models.models import Car, Salesperson, Customer, Sale  # Fix the import path
+from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:aicha1234@localhost/car_dealership'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)    
+with app.app_context():
+    db.create_all
 #Database connection
 def connect_to_db():
     try:
@@ -122,7 +132,10 @@ def create():
             
             flash("Car added successfully!", "green")
             return redirect(url_for('index'))
+
     return render_template('create.html')
+
+
 
 # Edit Car 
 @app.route('/edit/<int:car_id>', methods=['GET','POST'])
@@ -192,9 +205,41 @@ def car_details(car_id):
     return render_template("details.html", car=car)
 
 
-
-
-
+# :charts
+@app.route('/charts')
+def charts():
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        
+        # Get cars per model count
+        cursor.execute("""
+            SELECT model, COUNT(*) as count 
+            FROM cars 
+            GROUP BY model
+        """)
+        cars_data = cursor.fetchall()
+        
+        data = {
+            'cars': {
+                'labels': [car[0] for car in cars_data],
+                'values': [car[1] for car in cars_data]
+            },
+            'salespeople': {'labels': [], 'values': []},
+            'customers': {'labels': [], 'values': []},
+            'sales_year': {'labels': [], 'values': []}
+        }
+        
+        conn.close()
+        return render_template("charts.html", data=data)
+    except Exception as e:
+        print("Error in charts route:", e)
+        return render_template("charts.html", data={
+            'cars': {'labels': [], 'values': []},
+            'salespeople': {'labels': [], 'values': []},
+            'customers': {'labels': [], 'values': []},
+            'sales_year': {'labels': [], 'values': []}
+        })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

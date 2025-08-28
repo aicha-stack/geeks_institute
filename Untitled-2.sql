@@ -1,0 +1,1 @@
+alter TABLE cars add COLUMN description TEXT;

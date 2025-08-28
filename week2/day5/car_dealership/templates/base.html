@@ -1,30 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Car Dealership</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-pink-50 font-sans">
     <nav class="bg-pink-400 p-4 text-white flex justify-between">
         <a href="{{ url_for('index') }}" class="font-bold text-xl">Car Dealership</a>
         <div>
-            <a href="{{ url_for('create') }}" class="bg-white text-pink-500 px-3 py-1 rounded hover:bg-pink-100">Add Car</a>
+            <a href="{{ url_for('charts') }}"
+                class="bg-white text-pink-500 px-3 py-1 rounded hover:bg-pink-100">charts</a>
+            <a href="{{ url_for('create') }}" class="bg-white text-pink-500 px-3 py-1 rounded hover:bg-pink-100">Add
+                Car</a>
         </div>
     </nav>
 
     <div class="container mx-auto p-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, msg in messages %}
-                    <div class="p-2 mb-2 rounded {% if category == 'red' %}bg-red-200 text-red-800{% else %}bg-blue-200 text-blue-800{% endif %}">
-                        {{ msg }}
-                    </div>
-                {% endfor %}
-            {% endif %}
+        {% if messages %}
+        {% for category, msg in messages %}
+        <div
+            class="p-2 mb-2 rounded {% if category == 'pink' %}bg-pink-200 text-red-800{% else %}bg-blue-200 text-blue-800{% endif %}">
+            {{ msg }}
+        </div>
+        {% endfor %}
+        {% endif %}
         {% endwith %}
-        {% block content %}{% endblock %}
+
+{% block content %}         {% endblock %}
+
+
     </div>
 </body>
+
 </html>
