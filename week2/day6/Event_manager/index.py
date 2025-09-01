@@ -3,8 +3,6 @@ from database.index import connect_to_db
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
-
-# Page d'accueil - liste events
 @app.route('/')
 def index():
     conn = connect_to_db()
@@ -15,8 +13,6 @@ def index():
         events = cursor.fetchall()
         conn.close()
     return render_template('index.html', events=events)
-
-# Create event
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':
@@ -42,8 +38,6 @@ def create():
             flash("Event créé!", "green")
             return redirect(url_for('index'))
     return render_template('create.html')
-
-# Details
 @app.route('/details/<int:event_id>')
 def details(event_id):
     conn = connect_to_db()
@@ -55,8 +49,7 @@ def details(event_id):
         conn.close()
     return render_template('details.html', event=event)
 
-# Edit
-@app.route('/edit/<int:event_id>', methods=['GET','POST'])
+
 def edit(event_id):
     conn = connect_to_db()
     event = None
@@ -96,4 +89,4 @@ def stats():
     return render_template('stats.html', stats=stats_data)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
